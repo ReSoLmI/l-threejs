@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en">
+    <meta charset="UTF-8" />
+    <title></title>
+    <script src="../utils/three.js"></script>
+    <script src="js/controls/OrbitControls.js"></script>
+    <script src="./js/libs/tween.min.js"></script>
+    <script src="./js/libs/inflate.min.js"></script>
+    <script src="./js/loaders/FBXLoader.js"></script>
+  </head>
+
+  <body>
+    <script>
+      //创建场景，相机，渲染器，网格
+      let scene, camera, renderer, controls, tween, mesh, mixer;
+      let player = { height: 20, speed: 0.2, turnSpeed: Math.PI * 0.05 }; // 动画对象
+      let renwu;
+      let flag = false;
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(90, 1280 / 720, 0.1, 100); // 透视相机
+      let clock = new THREE.Clock(); // 时钟对象
+
+      // 添加人物
+      let models = [];
+      let loader = new THREE.FBXLoader();
+      loader.load("../static/SambaDancing.fbx", function(object) {
+        mixer = new THREE.AnimationMixer(object);
+        let action = mixer.clipAction(object.animations[0]);
+        action.play();
+        object.traverse(function(child) {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+        });
+        object.rotation.y = 1.57;
+        object.scale.set(0.01, 0.01, 0.01); //网格模型缩放
+        // object.rotation.x = -1.57;
+        renwu = new THREE.Group();
+        renwu.add(object);
+        scene.add(renwu);
+        console.log(renwu);
+      });
+
+      //辅助线
+      let axes = new THREE.AxisHelper(20);
+      scene.add(axes);
+
+      // 创建平滑曲线
+      let curve = new THREE.CatmullRomCurve3(
+        [
+          new THREE.Vector3(-40, 0, -5),
+          new THREE.Vector3(-6, 0, -10),
+          new THREE.Vector3(10, 0, -5),
+
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(-6, 0, -3),
+          new THREE.Vector3(-3, 0, -7),
+          new THREE.Vector3(10, 0, -5)
+        ],
+        false /*是否闭合*/
+      ); //使用Catmull-Rom算法， 从一系列的点创建一条平滑的三维样条曲线。
+
+      console.log("____curve",curve)
+
+      // 添加轨迹线
+      let points = curve.getPoints(3000);
+      let _material = new THREE.LineBasicMaterial({
+        color: 0xff0000
+      });
+      let _geometry = new THREE.BufferGeometry();
+      let _pointsBuf = [];
+      let _vertices = new Float32Array(_pointsBuf);
+      _geometry.addAttribute(
+        "position",
+        new THREE.BufferAttribute(_vertices, 3)
+      );
+      let _lineA = new THREE.Line(_geometry, _material);
+      scene.add(_lineA);
+
+      let _i = 0;
+      setTimeout(() => {
+        setInterval(() => {
+          _pointsBuf.push(points[_i].x, points[_i].y, points[_i].z);
+          _vertices = new Float32Array(_pointsBuf);
+          _geometry.addAttribute(
+            "position",
+            new THREE.BufferAttribute(_vertices, 3)
+          );
+          // renwu.position.set(points[_i].x, points[_i].y, points[_i].z);
+          // renwu.lookAt(points[_i + 1].x, points[_i + 1].y, points[_i + 1].z);
+          _i++;
+          if (_i > 3000 - 1) _i = 0;
+        }, 10);
+      }, 3000);
+
+      //环境光
+      ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+      scene.add(ambientLight);
+      //点光
+      light = new THREE.PointLight(0xffffff, 0.9, 250);
+      light.position.set(0, 20, -10);
+      light.castShadow = true;
+      light.shadow.camera.near = 0.1;
+      light.shadow.camera.far = 25;
+      scene.add(light);
+
+      camera.position.set(0, player.height, -5);
+      camera.lookAt(new THREE.Vector3(0, player.height, 0));
+
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setClearColor(0x4682b4, 1.0);
+      renderer.setSize(1280, 720);
+
+      //把画面插入HTML中的body标签下显示
+      document.body.appendChild(renderer.domElement);
+
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      animate();
+
+      function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        let delta = clock.getDelta();
+        if (mixer) mixer.update(delta);
+        renderer.render(scene, camera);
+      }
+
+    </script>
+  </body>
+</html>

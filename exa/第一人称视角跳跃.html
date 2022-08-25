@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>第一视角移动</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<style>
+		html, body {
+			width: 100%;
+			height: 100%;
+		}
+		body {
+			background-color: #ffffff;
+			margin: 0;
+			overflow: hidden;
+		}
+		#blocker {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0,0,0,0.5);
+		}
+		#instructions {
+			width: 100%;
+			height: 100%;
+			display: -webkit-box;
+			-webkit-box-orient: horizontal;
+			-webkit-box-pack: center;
+			-webkit-box-align: center;
+			color: #ffffff;
+			text-align: center;
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+<script src="../utils/three.js"></script>
+<script src="js/controls/PointerLockControls.js"></script>
+<div id="blocker">
+	<div id="instructions">
+		<span style="font-size:40px">Click to play</span>
+		<br />
+		(W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
+	</div>
+</div>
+<script>
+
+	let camera, scene, renderer, controls;
+	let objects = [];
+	let rayCaster;
+	let blocker = document.getElementById( 'blocker' );
+	let instructions = document.getElementById( 'instructions' );
+	let havePointerLock = 'pointerLockElement' in document  || 'webkitPointerLockElement' in document;
+	console.log("___havePointerLock",havePointerLock)
+	// pointerLockElement 特性规定了如在鼠标事件中当目标被锁定时的元素集和。如果指针处于锁定等待中、指针没有被锁定，或者目标在另外一个文档中这几种情况，返回的值null。
+
+	let controlsEnabled = false;
+	let moveForward = false;
+	let moveBackward = false;
+	let moveLeft = false;
+	let moveRight = false;
+	let canJump = false;
+	let prevTime = performance.now(); // 毫秒级时间戳
+	let velocity = new THREE.Vector3();
+	console.log("____velocity_1",velocity)
+	let direction = new THREE.Vector3();
+
+	if ( havePointerLock ) {
+		console.log("----document",document.pointerLockElement);
+		let element = document.body;
+		let pointerlockchange = function ( ) {
+			if ( document.pointerLockElement === element || document.webkitPointerLockElement === element ) {
+				controlsEnabled = true;
+				controls.enabled = true;
+				blocker.style.display = 'none';
+				console.log("----document1",document.pointerLockElement);
+			} else {
+				controls.enabled = false;
+				blocker.style.display = 'block';
+				instructions.style.display = '';
+				console.log("----document2",document.pointerLockElement);
+			}
+		};
+		let pointerlockerror = function ( ) {
+			instructions.style.display = '';
+		};
+		document.addEventListener( 'pointerlockchange', pointerlockchange );
+		document.addEventListener( 'webkitpointerlockchange', pointerlockchange );
+		document.addEventListener( 'pointerlockerror', pointerlockerror );
+		document.addEventListener( 'webkitpointerlockerror', pointerlockerror );
+		instructions.addEventListener( 'click', function ( ) {
+			instructions.style.display = 'none';
+			element.requestPointerLock = element.requestPointerLock  || element.webkitRequestPointerLock;
+			element.requestPointerLock();
+			// 方法允许您异步地请求将鼠标指针锁定在指定元素上
+			// document.exitPointerLock() 请求退出指针锁定
+		} );
+	} else {
+		instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+	}
+
+	init();
+	animate();
+
+	function init() {
+		camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 ); // 透视相机
+		scene = new THREE.Scene();
+		scene.background = new THREE.Color( 0xffffff );
+		scene.fog = new THREE.Fog( 0xffffff, 0, 750 ); // 线性雾 颜色白色 开始应用雾的最近距离 0  计算结束的最远距离 750
+
+		let light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 ); // 半球光
+		//光源直接放置于场景之上，光照颜色从天空光线颜色渐变到地面光线颜色。半球光不能投射阴影。
+		// skyColor - (可选参数) 天空中发出光线的颜色。 缺省值 0xffffff。
+		// groundColor - (可选参数) 地面发出光线的颜色。 缺省值 0xffffff。
+		// intensity - (可选参数) 光照强度。 缺省值 1。
+		light.position.set( 0.5, 1, 0.75 );
+		scene.add( light );
+
+		// 添加鼠标指针控制器
+		controls = new THREE.PointerLockControls( camera );
+		scene.add( controls.getObject() );
+
+		let onKeyDown = function ( event ) {
+			switch ( event.keyCode ) {
+				case 38: // up
+				case 87: // w
+					moveForward = true;
+					break;
+				case 37: // left
+				case 65: // a
+					moveLeft = true;
+					break;
+				case 40: // down
+				case 83: // s
+					moveBackward = true;
+					break;
+				case 39: // right
+				case 68: // d
+					moveRight = true;
+					break;
+				case 32: // space
+					if ( canJump === true ) velocity.y += 350;
+					canJump = false;
+					break;
+			}
+		};
+
+		let onKeyUp = function ( event ) {
+			switch( event.keyCode ) {
+				case 38: // up
+				case 87: // w
+					moveForward = false;
+					break;
+				case 37: // left
+				case 65: // a
+					moveLeft = false;
+					break;
+				case 40: // down
+				case 83: // s
+					moveBackward = false;
+					break;
+				case 39: // right
+				case 68: // d
+					moveRight = false;
+					break;
+			}
+		};
+
+		document.addEventListener( 'keydown', onKeyDown );
+		document.addEventListener( 'keyup', onKeyUp );
+
+		// console.log("____new THREE.Vector3()",new THREE.Vector3())
+		rayCaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
+		// 这个类用于进行 raycasting（光线投射）。 光线投射用于进行鼠标拾取（在三维空间中计算出鼠标移过了什么物体）。
+		// 参数说明 ：
+		// Raycaster( origin : Vector3, direction : Vector3, near : Float, far : Float ) {
+		// 	origin —— 光线投射的原点向量。
+		// 	direction —— 向射线提供方向的方向向量，应当被标准化。
+		// 	near —— 返回的所有结果比near远。near不能为负值，其默认值为0。
+		// 	far —— 返回的所有结果都比far近。far不能小于near，其默认值为Infinity（正无穷。）
+
+		// floor
+		let floorGeometry = new THREE.PlaneGeometry( 2000, 2000, 100, 100 );
+		// 用于生成平面几何体的类
+		// 参数说明
+		// PlaneGeometry(width : Float, height : Float, widthSegments : Integer, heightSegments : Integer)
+		// width — 平面沿着X轴的宽度。默认值是1。
+		// height — 平面沿着Y轴的高度。默认值是1。
+		// widthSegments — （可选）平面的宽度分段数，默认值是1。
+		// heightSegments — （可选）平面的高度分段数，默认值是1。
+		floorGeometry.rotateX( - Math.PI / 2 );
+
+		// 随机位置
+		for ( let i = 0, l = floorGeometry.vertices.length; i < l; i ++ ) {
+			let vertex = floorGeometry.vertices[ i ];
+			vertex.x += Math.random() * 20 - 10;
+			vertex.y += Math.random() * 2;
+			vertex.z += Math.random() * 20 - 10;
+		}
+
+		// 随机颜色
+		for ( let i = 0, l = floorGeometry.faces.length; i < l; i ++ ) {
+			let face = floorGeometry.faces[ i ];
+			face.vertexColors[ 0 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+			face.vertexColors[ 1 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+			face.vertexColors[ 2 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+		}
+
+		let floorMaterial = new THREE.MeshBasicMaterial( { vertexColors: THREE.VertexColors } );
+		// VertexColors 根据每个 Face3的vertexColors（顶点颜色）值来对面进行着色。 这是一个包含有三个Color的数组，数组中每一项都对应着面中的每一个顶点。
+
+		let floor = new THREE.Mesh( floorGeometry, floorMaterial );
+		scene.add( floor );
+
+		// objects
+		let boxGeometry = new THREE.BoxGeometry( 20, 20, 20 );
+
+		for ( let i = 0, l = boxGeometry.faces.length; i < l; i ++ ) {
+
+			let face = boxGeometry.faces[ i ];
+			face.vertexColors[ 0 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+			face.vertexColors[ 1 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+			face.vertexColors[ 2 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+
+		}
+
+		for ( let i = 0; i < 500; i ++ ) {
+
+			let boxMaterial = new THREE.MeshPhongMaterial( { specular: 0xffffff, flatShading: true, vertexColors: THREE.VertexColors } );
+			boxMaterial.color.setHSL( Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+
+			let box = new THREE.Mesh( boxGeometry, boxMaterial );
+			box.position.x = Math.floor( Math.random() * 20 - 10 ) * 20;
+			box.position.y = Math.floor( Math.random() * 20 ) * 20 + 10;
+			box.position.z = Math.floor( Math.random() * 20 - 10 ) * 20;
+
+			scene.add( box );
+			objects.push( box );
+		}
+
+		renderer = new THREE.WebGLRenderer();
+		renderer.setPixelRatio( window.devicePixelRatio ); // 像素比
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		document.body.appendChild( renderer.domElement );
+
+		window.addEventListener( 'resize', onWindowResize );
+
+	}
+
+	function onWindowResize() {
+		camera.aspect = window.innerWidth / window.innerHeight; // 设置透视相机宽高比
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		// 渲染器执行render方法的时候会读取相机对象的投影矩阵属性projectionMatrix
+		// 但是不会每渲染一帧，就通过相机的属性计算投影矩阵(节约计算资源)
+		// 如果相机的一些属性发生了变化，需要执行updateProjectionMatrix ()方法更新相机的投影矩阵
+		camera.updateProjectionMatrix();
+	}
+
+	function animate() {
+		requestAnimationFrame( animate ); //  与 setInterval 类似 单不需要指定执行的时间间隔，requestAnimationFrame 只请求下一帧
+		if ( controlsEnabled === true ) {
+			rayCaster.ray.origin.copy( controls.getObject().position );
+			// rayCaster.ray.origin.y -= 10;
+
+			let intersections = rayCaster.intersectObjects( objects );
+			// console.log("____intersections",intersections)
+
+		// .intersectObjects ( objects : Array, recursive : Boolean, optionalTarget : Array ) : Array
+		// 	objects —— 检测和射线相交的一组物体。
+		// 	recursive —— 若为true，则同时也会检测所有物体的后代。否则将只会检测对象本身的相交部分。默认值为false。
+		// 	optionalTarget —— （可选）（可选）设置结果的目标数组。如果不设置这个值，则一个新的Array会被实例化；如果设置了这个值，则在每次调用之前必须清空这个数组（例如：array.length = 0;）。
+		// 	检测所有在射线与这些物体之间，包括或不包括后代的相交部分。返回结果时，相交部分将按距离进行排序，最近的位于第一个），相交部分和.intersectObject所返回的格式是相同的。
+
+			let onObject = intersections.length > 0;
+
+			let time = performance.now();
+			// console.log("____time",time)
+			let delta = ( time - prevTime ) / 1000;
+			// console.log("___delta",delta) // 0.0165
+
+			// console.log("____velocity_1",velocity)
+			velocity.x -= velocity.x * 10.0 * delta;
+			velocity.z -= velocity.z * 10.0 * delta;
+
+			velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+
+			direction.x = Number( moveLeft ) - Number( moveRight );
+			direction.z = Number( moveForward ) - Number( moveBackward );
+			direction.normalize(); // 确保各个方向的一致运动
+			// 将该向量转换为单位向量（unit vector）， 也就是说，将该向量的方向设置为和原向量相同，但是其长度（length）为1。
+
+			if ( moveForward || moveBackward ) velocity.z -= direction.z * 400.0 * delta;
+			if ( moveLeft || moveRight ) velocity.x -= direction.x * 400.0 * delta;
+
+			if ( onObject === true ) {
+				velocity.y = Math.max( 0, velocity.y );
+				canJump = true;
+			}
+
+			controls.getObject().translateX( velocity.x * delta );
+			controls.getObject().translateY( velocity.y * delta );
+			controls.getObject().translateZ( velocity.z * delta );
+
+			if ( controls.getObject().position.y < 10 ) {
+				velocity.y = 0;
+				controls.getObject().position.y = 10;
+				canJump = true;
+			}
+			prevTime = time;
+		}
+		renderer.render( scene, camera );
+	}
+
+</script>
+</body>
+</html>

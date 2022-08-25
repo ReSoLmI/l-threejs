@@ -1,0 +1,68 @@
+{
+  "name": "@lstack/vuepress-theme-lstack",
+  "version": "1.0.3",
+  "description": "LStack 用户手册文档主题",
+  "keywords": [
+    "vuepress-theme",
+    "vuepress",
+    "lstack"
+  ],
+  "homepage": "http://git.lstack-inner.com/lstack-hybrid/console/lsh-frontend/#readme",
+  "bugs": {
+    "url": "http://git.lstack-inner.com/lstack-hybrid/console/lsh-frontend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://git.lstack-inner.com/lstack-hybrid/console/lsh-frontend.git",
+    "directory": "packages/@lstack/vuepress-theme-lstack"
+  },
+  "author": "lstack.com",
+  "main": "index.js",
+  "dependencies": {
+    "@docsearch/css": "^3.0.0-alpha.40",
+    "@docsearch/js": "^3.0.0-alpha.40",
+    "@lstack/project": "^1.0.0",
+    "@lstack/utils": "^1.0.0",
+    "@mr-hope/vuepress-plugin-comment": "1.20.0",
+    "@mr-hope/vuepress-plugin-components": "1.20.0",
+    "@mr-hope/vuepress-plugin-copy-code": "1.20.0",
+    "@mr-hope/vuepress-plugin-feed": "1.20.0",
+    "@mr-hope/vuepress-plugin-git": "1.20.0",
+    "@mr-hope/vuepress-plugin-pwa": "1.20.0",
+    "@mr-hope/vuepress-plugin-seo": "1.20.0",
+    "@mr-hope/vuepress-plugin-sitemap": "1.20.0",
+    "@mr-hope/vuepress-plugin-smooth-scroll": "1.20.0",
+    "@mr-hope/vuepress-shared": "1.20.0",
+    "@mr-hope/vuepress-theme-types": "1.20.0",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/lodash.debounce": "^4.0.6",
+    "@types/lodash.throttle": "^4.1.6",
+    "@types/react": "^17.0.19",
+    "@vuepress/plugin-back-to-top": "^1.8.2",
+    "@vuepress/plugin-blog": "^1.9.4",
+    "bcryptjs": "^2.4.3",
+    "chalk": "^4.1.2",
+    "dayjs": "^1.10.6",
+    "docsearch.js": "^2.6.3",
+    "lodash.debounce": "^4.0.8",
+    "lodash.throttle": "^4.1.1",
+    "vuepress-plugin-active-hash": "1.20.0",
+    "vuepress-plugin-add-this": "1.20.0",
+    "vuepress-plugin-clean-urls": "^1.1.2",
+    "vuepress-plugin-container": "^2.1.5",
+    "vuepress-plugin-copyright": "^1.0.2",
+    "vuepress-plugin-export": "^0.2.0",
+    "vuepress-plugin-md-enhance": "1.20.0",
+    "vuepress-plugin-medium-zoom": "^1.1.9",
+    "vuepress-plugin-photo-swipe": "1.20.0",
+    "vuepress-plugin-redirect": "^1.2.5",
+    "vuepress-plugin-typescript": "^0.3.1"
+  },
+  "peerDependencies": {
+    "typescript": "^4.3.5",
+    "vuepress": "^1.8.2"
+  },
+  "publishConfig": {
+    "registry": "http://npm.lstack-inner.com/"
+  }
+}

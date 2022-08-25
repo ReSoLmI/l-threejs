@@ -1,0 +1,209 @@
+newmtl Iking_Zhulou_06:_lambert13SG
+illum 4
+Kd 0.82 0.82 0.82
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl Iking_Zhulou_06:_lambert19SG
+illum 4
+Kd 0.75 0.75 0.75
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd 03_Base_Color.png
+Ni 1.00
+newmtl Iking_Zhulou_06:_lambert23SG
+illum 4
+Kd 0.00 0.38 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl Iking_Zhulou_06:_lambert24SG
+illum 4
+Kd 0.08 0.04 0.35
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl Iking_Zhulou_06:_lambert39SG
+illum 4
+Kd 0.88 0.88 0.88
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd 234_PS_2.png
+Ni 1.00
+newmtl Iking_Zhulou_06:_lambert40SG
+illum 4
+Kd 0.48 0.48 0.48
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Glass_01.png
+Ni 1.00
+newmtl Iking_Zhulou_06:_lambert41SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd 234_2.png
+Ni 1.00
+newmtl Iking_Zhulou_06:_lambert43SG
+illum 4
+Kd 0.28 0.28 0.28
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd 1_2.png
+Ni 1.00
+newmtl Iking_Zhulou_06:_lambert45SG
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Glass_02.png
+Ni 1.00
+newmtl Iking_Zhulou_06:_lambert49SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd UV_fangding.jpg
+Ni 1.00
+newmtl Iking_Zhulou_06:_lambert50SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Glass_03.png
+Ni 1.00
+newmtl Iking_Zhulou_06:_lambert51SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd UV_caigang.jpg
+Ni 1.00
+newmtl Iking_Zhulou_06:_lambert52SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd UV_fangding02.jpg
+Ni 1.00
+newmtl Iking_Zhulou_06:lambert47SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 1.00 1.00 1.00
+Tf 0.95 0.95 0.95
+map_Kd Iking_17.123_other.png
+Ni 1.00
+newmtl Iking_Zhulou_06:lambert48SG
+illum 4
+Kd 0.38 0.38 0.38
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl Iking_Zhulou_06:lambert49SG
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl Iking_Zhulou_06:lambert50SG
+illum 4
+Kd 0.73 0.73 0.73
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl Iking_Zhulou_06:lambert51SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd UV_taijie.jpg
+Ni 1.00
+newmtl Iking_Zhulou_06:lambert52SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Iking_Zhulou_04.123_other.png
+Ni 1.00
+newmtl initialShadingGroup
+illum 4
+Kd 0.50 0.50 0.50
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl lambert2SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Bui_T_SP_03_Dalishi_BaseColor.tif
+Ni 1.00
+newmtl lambert3SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Rolling door.jpg
+Ni 1.00
+newmtl lambert4SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl lambert5SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+     map_Kd UV_234_Front.png
+     Ni 1.00
+     newmtl lambert6SG
+     illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+     map_Kd 234_2ceshi.png
+     Ni 1.00
+     newmtl lambert7SG
+     illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+     map_Kd Zhulou_1_2.png
+     Ni 1.00
+     newmtl lambert8SG
+     illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+     map_Kd SECON_1_2.png
+     Ni 1.00
+     newmtl lambert9SG
+     illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+        map_Kd THIRD_234.png
+        Ni 1.00
+        newmtl lambert10SG
+        illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+        map_Kd THIRD_1.png
+        Ni 1.00
+        newmtl lambert11SG
+        illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+        map_Kd THIRD_234_2.png
+        Ni 1.00
+        newmtl lambert12SG
+        illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd THIRD_1_2.png
+Ni 1.00

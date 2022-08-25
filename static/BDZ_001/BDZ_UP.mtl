@@ -1,0 +1,105 @@
+newmtl initialShadingGroup
+illum 4
+Kd 0.50 0.50 0.50
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl lambert2SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd UV01_F.png
+Ni 1.00
+newmtl lambert4SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd UV02_F.png
+Ni 1.00
+newmtl lambert5SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd UVdimian.png
+Ni 1.00
+newmtl lambert6SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd UV03_F.png
+Ni 1.00
+newmtl lambert7SG
+illum 4
+Kd 0.34 0.22 0.07
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl lambert8SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd UV04_F.png
+Ni 1.00
+newmtl lambert10SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd wall_lambert10SG_BaseColor.png
+Ni 1.00
+newmtl lambert11SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd wall_lambert11SG_BaseColor.png
+Ni 1.00
+newmtl lambert12SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd wall_lambert12SG_BaseColor.png
+Ni 1.00
+newmtl lambert13SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd UV04_2_F.png
+Ni 1.00
+newmtl lambert14SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd UV_002_F.png
+Ni 1.00
+newmtl lambert15SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd UV_Ding_F.png
+Ni 1.00
+newmtl lambert16SG
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd UV_001_F.png
+Ni 1.00
+newmtl textured_output:material_0
+illum 4
+Kd 0.98 0.98 0.98
+Ka 0.10 0.10 0.10
+Tf 1.00 1.00 1.00
+map_Kd textured_output.jpg
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 1.00

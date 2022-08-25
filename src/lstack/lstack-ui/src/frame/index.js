@@ -1,0 +1,7 @@
+export { default as SideMirrorPageFrame } from './side-mirror-page-frame'
+export { default as IndexPageFrame } from './index-page-frame'
+export { default as InnerPageFrame } from './inner-page-frame'
+export { default as InnerInfoPageFrame } from './inner-info-page-frame'
+export { default as InfoPageFrame } from './info-page-frame'
+export { default as SidePageFrame } from './side-page-frame'
+export { default as SideInfoPageFrame } from './side-info-page-frame'

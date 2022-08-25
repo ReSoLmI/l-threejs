@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>不同材质</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      /* 隐藏body窗口区域滚动条 */
+    }
+  </style>
+  <script src="../utils/three.js"></script>
+  <script src="js/controls/OrbitControls.js"></script>
+</head>
+
+<body>
+  <script>
+    // function rotateAroundWorldAxis(object, axis, radians) {
+    //   rotWorldMatrix = new THREE.Matrix4();
+    //   rotWorldMatrix.makeRotationAxis(axis.normalize(), radians);
+    //   rotWorldMatrix.multiply(object.matrix);                // pre-multiply
+    //   object.matrix = rotWorldMatrix;
+    //   object.rotation.setFromRotationMatrix(object.matrix);
+    // }
+
+
+   function getRotationMatrix(start, axis, theta) {
+      // start, axis: THREE.Vector3
+      // Theta: float
+      let x = start.x;
+      let y = start.y;
+      let z = start.z;
+      let uUn = axis.x;
+      let vUn = axis.y;
+      let wUn = axis.z;
+      let l = Math.sqrt(uUn * uUn + vUn * vUn + wUn * wUn);
+      // In this instance we normalize the direction vector.
+      let u = uUn / l;
+      let v = vUn / l;
+      let w = wUn / l;
+      // Set some intermediate values.
+      let u2 = u * u;
+      let v2 = v * v;
+      let w2 = w * w;
+      let cosT = Math.cos(theta);
+      let oneMinusCosT = 1 - cosT;
+      let sinT = Math.sin(theta);
+
+      let rotationMatrix = new Array(16);
+
+      rotationMatrix[0] = u2 + (v2 + w2) * cosT;
+      rotationMatrix[1] = u * v * oneMinusCosT + w * sinT;
+      rotationMatrix[2] = u * w * oneMinusCosT - v * sinT;
+      rotationMatrix[3] = 0;
+
+      rotationMatrix[4] = u * v * oneMinusCosT - w * sinT;
+      rotationMatrix[5] = v2 + (u2 + w2) * cosT;
+      rotationMatrix[6] = v * w * oneMinusCosT + u * sinT;
+      rotationMatrix[7] = 0;
+
+      rotationMatrix[8] = u * w * oneMinusCosT + v * sinT;
+      rotationMatrix[9] = v * w * oneMinusCosT - u * sinT;
+      rotationMatrix[10] = w2 + (u2 + v2) * cosT;
+      rotationMatrix[11] = 0;
+
+      rotationMatrix[12] =
+        (x * (v2 + w2) - u * (y * v + z * w)) * oneMinusCosT +
+        (y * w - z * v) * sinT;
+      rotationMatrix[13] =
+        (y * (u2 + w2) - v * (x * u + z * w)) * oneMinusCosT +
+        (z * u - x * w) * sinT;
+      rotationMatrix[14] =
+        (z * (u2 + v2) - w * (x * u + y * v)) * oneMinusCosT +
+        (x * v - y * u) * sinT;
+      rotationMatrix[15] = 1;
+
+      return rotationMatrix;
+    }
+
+
+    /** 创建场景对象Scene */
+    let scene = new THREE.Scene();
+    // 立方体网格模型
+    let geometry1 = new THREE.BoxGeometry(30, 20, 50);
+    let material1 = new THREE.MeshLambertMaterial({
+      color: 0xff0000,
+    }); //材质对象Material
+    let cube = new THREE.Mesh(geometry1, material1); //网格模型对象Mesh
+    console.log("_____cube",cube)
+    // let axis = new THREE.Vector3(10, 0, 10); //创建一个三维向量
+    // let rotWorldMatrix = new THREE.Matrix4(); //创建一个4*4矩阵
+    // console.log("______axis.normalize()",axis.normalize())
+    // rotWorldMatrix.makeRotationAxis(axis.normalize(), 60 * Math.PI / 180);
+    // // rotWorldMatrix.multiply(cube.matrix); // 当前矩阵乘以矩阵cube.matrix
+    // // console.log("_______rotWorldMatrix",rotWorldMatrix)
+    //
+    // // let start = new THREE.Vector3(0,0,0); // 开始三维向量
+    // // let end = new THREE.Vector3(500,500,500); // 结束三维向量
+    // // let rotateMatrix4 = {}
+    // // rotateMatrix4.elements = getRotationMatrix( start , end,720)
+    // // console.log("_______rotWorldMatrix",rotateMatrix4)
+    // cube.matrix = rotWorldMatrix;
+    // cube.rotation.setFromRotationMatrix(rotWorldMatrix);
+    scene.add(cube); //网格模型添加到场景中
+    console.log("_____cube",cube)
+
+
+    var line_material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+    var line_geometry = new THREE.Geometry();
+    line_geometry.vertices.push(new THREE.Vector3( 0, 0, 0) );
+    line_geometry.vertices.push(new THREE.Vector3( 500, 0, 500) );
+    const curveObject = new THREE.Line(line_geometry, line_material);
+    console.log("_____curveObject",curveObject)
+    scene.add(curveObject);
+
+    var line_material_2 = new THREE.LineBasicMaterial( { color: 0xff00ff } );
+    var line_geometry_2 = new THREE.Geometry();
+    line_geometry_2.vertices.push(new THREE.Vector3( 0, 0, 0) );
+    line_geometry_2.vertices.push(new THREE.Vector3( 500, 0, -500) );
+    const curveObject_2 = new THREE.Line(line_geometry_2, line_material_2);
+    console.log("_____curveObject_2",curveObject_2)
+    scene.add(curveObject_2);
+
+    let axesHelper = new THREE.AxesHelper(250);
+    scene.add(axesHelper);
+
+
+
+
+
+    // let geometry = new THREE.PlaneGeometry(60, 60); //矩形平面
+    // // 图片加载器
+    // let ImageLoader = new THREE.ImageLoader();
+    // // load方法回调函数，按照路径加载图片，返回一个html的元素img对象
+    // ImageLoader.load(`../static/圣max-灯语.gif`, function (img) {
+    //   console.log("____image",img)
+    //   // image对象作为参数，创建一个纹理对象Textusre
+    //   let texture = new THREE.Texture(img);
+    //   // 下次使用纹理时触发更新
+    //   texture.needsUpdate = true;
+    //   let material = new THREE.MeshLambertMaterial({
+    //     map: texture, //设置纹理贴图
+    //   });
+    //   let mesh = new THREE.Mesh(geometry, material); //网格模型对象Mesh
+    //   // mesh.position.set(i, 0, 0);
+    //   mesh.position.set(-100, -100, -100); // 500Kv 变电站
+    //   mesh.rotateX(-Math.PI / 2);
+    //   scene.add(mesh); //网格模型添加到场景中
+    // });
+    /**
+     * 创建一个设置重复纹理的管道
+     */
+
+
+
+
+
+
+    /** 光源设置 */
+    //点光源
+    let point = new THREE.PointLight(0xffffff);
+    point.position.set(400, 200, 300); //点光源位置
+    scene.add(point); //点光源添加到场景中
+    //环境光
+    let ambient = new THREE.AmbientLight(0x444444);
+    scene.add(ambient);
+
+    /** 相机设置 */
+    let width = window.innerWidth; //窗口宽度
+    let height = window.innerHeight; //窗口高度
+    let k = width / height; //窗口宽高比
+    let s = 150; //三维场景显示范围控制系数，系数越大，显示的范围越大
+    //创建相机对象
+    let camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 1000);
+    camera.position.set(200, 300, 200); //设置相机位置
+    camera.lookAt(scene.position); //设置相机方向(指向的场景对象)
+
+    /** 创建渲染器对象 */
+    let renderer = new THREE.WebGLRenderer();
+    renderer.setSize(width, height); //设置渲染区域尺寸
+    renderer.setClearColor(0xb9d3ff, 1); //设置背景颜色
+    document.body.appendChild(renderer.domElement); //body元素中插入canvas对象
+    // 渲染函数
+    // function render() {
+    //   renderer.render(scene, camera); //执行渲染操作
+    // }
+    // render();
+    // //创建控件对象  相机对象camera作为参数   控件可以监听鼠标的变化，改变相机对象的属性
+    // let controls = new THREE.OrbitControls(camera,renderer.domElement);
+    // //监听鼠标事件，触发渲染函数，更新canvas画布渲染效果
+    // controls.addEventListener('change', render);
+
+    console.log("_____cube.matrix",cube.matrix)
+
+
+
+    // //-----鼠标控制旋转  //创建控件对象  相机对象camera作为参数   控件可以监听鼠标的变化，改变相机对象的属性
+    let controls = new THREE.OrbitControls(camera,renderer.domElement);
+
+    var curve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-80, -40, 0),
+      new THREE.Vector3(-70, 40, 0),
+      new THREE.Vector3(70, 40, 0),
+      new THREE.Vector3(80, -40, 0)
+    ]);
+    var tubeGeometry = new THREE.TubeGeometry(curve, 100, 0.9, 50, false);
+    var textureLoader = new THREE.TextureLoader();
+    var texture = textureLoader.load('../static/dengguang.jpg');
+    // 设置阵列模式为 RepeatWrapping
+    texture.wrapS = THREE.RepeatWrapping
+    texture.wrapT=THREE.RepeatWrapping
+    // 设置x方向的偏移(沿着管道路径方向)，y方向默认1
+    //等价texture.repeat= new THREE.Vector2(20,1)
+    texture.repeat.x = 20;
+    var tubeMaterial = new THREE.MeshPhongMaterial({
+      map: texture,
+      transparent: true,
+    });
+
+
+    // 设置数组材质对象作为网格模型材质参数
+    var mesh = new THREE.Mesh(tubeGeometry, tubeMaterial); //网格模型对象Mesh
+    scene.add(mesh); //网格模型添加到场景中
+
+
+    var animate = function () {
+      requestAnimationFrame( animate );
+      controls.update();
+      renderer.render( scene, camera );
+      texture.offset.x -= 0.006
+    };
+    animate();
+
+
+
+
+    // function render(){
+    //   // cube.rotateY(0.01);//每次绕y轴旋转0.01弧度
+    //
+    //   // console.log("______axis",cube)
+    //   let axis = new THREE.Vector3(0, 500, 0); //创建一个三维向量
+    //   let rotWorldMatrix = new THREE.Matrix4(); //创建一个4*4矩阵
+    //   rotWorldMatrix.makeRotationAxis(axis.normalize(), 0.6 * Math.PI / 180);
+    //   rotWorldMatrix.multiply(cube.matrix);
+    //   cube.matrix = rotWorldMatrix;
+    //   cube.rotation.setFromRotationMatrix(rotWorldMatrix);
+    //   // cube.matrixAutoUpdate = false;
+    //   // cube.updateMatrix()
+    //   renderer.render(scene,camera);//执行渲染操作
+    //
+    //   // requestAnimationFrame(render);//请求再次执行渲染函数render，渲染下一帧
+    // }
+    // // render();
+    // setInterval(()=>{
+    //   render()
+    // },20);
+    // render()
+
+
+    // function render() {
+    //   renderer.render(scene, camera); //执行渲染操作
+    // }
+    // //监听鼠标事件，触发渲染函数，更新canvas画布渲染效果
+    // controls.addEventListener('change', render);
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+* {
+  box-sizing: border-box;
+}
+
+body,
+html {
+  position: relative;
+  min-width: 1220px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  font-size: $font-size-body-m;
+  font-family: Roboto, San Francisco, Helvetica Neue, Helvetica, Arial, PingFangSC-Light, Hiragina Sans GB,
+    WenQuanYi Micro Hei, microsoft yahei ui, microsoft yahei, sans-serif;
+  line-height: $font-lineheight-normal;
+}
+
+body {
+  overflow-x: hidden;
+}
